@@ -54,4 +54,25 @@ public class CountryController {
         return sorted;
     }
 
+    @PatchMapping("/{code}/capital")
+    public String updateCountry(@PathVariable("code") String code, @RequestBody Map<String, String> update) {
+        Country country = countries.get(code.toUpperCase());
+        if(country == null) {
+            return "Country not found";
+        }
+        String capital = update.get("capital");
+        country.setCapital(capital);
+        return "Capital updated to " + capital;
+    }
+
+    @GetMapping("/population-above")
+    public List<Country> getContriesAbovePopulation(@RequestParam long min) {
+        List<Country> result = new ArrayList<>();
+        for (Country country : countries.values()) {
+            if(country.getPopulation() > min) {
+                result.add(country);
+            }
+        }
+        return result;
+    }
 }

@@ -75,4 +75,11 @@ public class CountryController {
         }
         return result;
     }
+
+    @GetMapping("/most-populated")
+    public Country getMostPopulatedCountry() {
+        return countries.values().stream()
+                .max(Comparator.comparing(Country::getPopulation))
+                .orElse(null);
+    }
 }

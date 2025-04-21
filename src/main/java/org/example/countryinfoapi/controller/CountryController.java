@@ -82,4 +82,13 @@ public class CountryController {
                 .max(Comparator.comparing(Country::getPopulation))
                 .orElse(null);
     }
+
+    @GetMapping("/capitals")
+    public List<String> getAllCapitals() {
+        List<String> capitals = new ArrayList<>();
+        for(Country country : countries.values()) {
+            capitals.add(country.getCapital());
+        }
+        return capitals;
+    }
 }

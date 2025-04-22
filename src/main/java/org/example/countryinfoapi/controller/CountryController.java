@@ -91,4 +91,12 @@ public class CountryController {
         }
         return capitals;
     }
+
+    @GetMapping("/names")
+    public List<String> getAllCountryNames() {
+        return countries.values().stream()
+                .map(Country::getName)
+                .sorted()
+                .toList();
+    }
 }

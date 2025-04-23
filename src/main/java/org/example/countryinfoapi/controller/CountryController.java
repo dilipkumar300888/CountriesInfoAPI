@@ -99,4 +99,11 @@ public class CountryController {
                 .sorted()
                 .toList();
     }
+
+    @GetMapping("/filter-by-name")
+    public List<Country> filterByName(@RequestParam String prefix) {
+        return countries.values().stream()
+                .filter(c -> c.getName().toLowerCase().startsWith(prefix.toLowerCase()))
+                .toList();
+    }
 }

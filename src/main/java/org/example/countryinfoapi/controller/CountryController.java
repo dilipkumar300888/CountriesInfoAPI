@@ -106,4 +106,11 @@ public class CountryController {
                 .filter(c -> c.getName().toLowerCase().startsWith(prefix.toLowerCase()))
                 .toList();
     }
+
+    @GetMapping("/total-population")
+    public long getTotalPopulation() {
+        return countries.values().stream()
+                .mapToLong(Country::getPopulation)
+                .sum();
+    }
 }

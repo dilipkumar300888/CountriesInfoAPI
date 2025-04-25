@@ -113,4 +113,12 @@ public class CountryController {
                 .mapToLong(Country::getPopulation)
                 .sum();
     }
+
+    @GetMapping("/top-populated")
+    public List<Country> getTopPopulatedCountries(@RequestParam(defaultValue = "3") int count) {
+        return countries.values().stream()
+                .sorted((a,b) -> Long.compare(b.getPopulation(),a.getPopulation()))
+                .limit(count)
+                .toList();
+    }
 }

@@ -121,4 +121,11 @@ public class CountryController {
                 .limit(count)
                 .toList();
     }
+
+    @GetMapping("/min-population")
+    public List<Country> getCountriesWithMinPopulation(@RequestParam long min) {
+        return countries.values().stream()
+                .filter(country -> country.getPopulation() >= min)
+                .toList();
+    }
 }

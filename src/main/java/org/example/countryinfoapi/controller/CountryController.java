@@ -128,4 +128,11 @@ public class CountryController {
                 .filter(country -> country.getPopulation() >= min)
                 .toList();
     }
+
+    @GetMapping("/population-range")
+    public List<Country> getCountriesByPopulationRange(@RequestParam long min,@RequestParam long max) {
+        return countries.values().stream()
+                .filter(country -> country.getPopulation() >= min && country.getPopulation() <= max)
+                .toList();
+    }
 }

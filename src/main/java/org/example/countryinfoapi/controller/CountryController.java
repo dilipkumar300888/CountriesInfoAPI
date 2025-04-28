@@ -135,4 +135,14 @@ public class CountryController {
                 .filter(country -> country.getPopulation() >= min && country.getPopulation() <= max)
                 .toList();
     }
+
+    @GetMapping("/random")
+    public Country getRandomCountry() {
+        List<Country> countryList = new ArrayList<>(countries.values());
+        if(countryList.isEmpty()) {
+            return null;
+        }
+        Random rand = new Random();
+        return countryList.get(rand.nextInt(countryList.size()));
+    }
 }

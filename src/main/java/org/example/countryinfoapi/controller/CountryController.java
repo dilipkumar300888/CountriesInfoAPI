@@ -1,8 +1,11 @@
 package org.example.countryinfoapi.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.countryinfoapi.model.Country;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 @RestController
@@ -144,5 +147,19 @@ public class CountryController {
         }
         Random rand = new Random();
         return countryList.get(rand.nextInt(countryList.size()));
+    }
+
+    @GetMapping(value = "/export",produces = "text/cvs")
+    public void exportCountriesToCsv(HttpServletResponse response) throws IOException {
+        response.setContentType("text/cvs");
+        response.setHeader("Content-Disposition", "attachment; filename=countries.csv");
+        PrintWriter writer = response.getWriter();
+        writer.println("Code,Name,Capital,Population");
+
+        for(Country country : countries.values()) {
+            writer.printf("%s,%s,%s,%d%n",country.getCode(),country.getName(),country.getCapital(),country.getPopulation());
+        }
+        writer.flush();
+        writer.close();
     }
 }

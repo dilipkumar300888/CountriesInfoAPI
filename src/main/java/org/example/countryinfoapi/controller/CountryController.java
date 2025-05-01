@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/countries")
@@ -161,5 +162,11 @@ public class CountryController {
         }
         writer.flush();
         writer.close();
+    }
+
+    @GetMapping("/grouperd-by-first-letter")
+    public Map<Character,List<Country>> groupCountriesByFirstLetter() {
+        return countries.values().stream()
+                .collect(Collectors.groupingBy(c -> Character.toUpperCase(c.getName().charAt(0))));
     }
 }

@@ -169,4 +169,14 @@ public class CountryController {
         return countries.values().stream()
                 .collect(Collectors.groupingBy(c -> Character.toUpperCase(c.getName().charAt(0))));
     }
+
+    @GetMapping("/search")
+    public List<Country> searchCountries(@RequestParam String keyword) {
+        String lowerKeyword = keyword.toLowerCase();
+        return countries.values().stream()
+                .filter(country ->
+                        country.getName().toLowerCase().contains(lowerKeyword) ||
+                        country.getCapital().toLowerCase().contains(lowerKeyword))
+                .toList();
+    }
 }

@@ -179,4 +179,13 @@ public class CountryController {
                         country.getCapital().toLowerCase().contains(lowerKeyword))
                 .toList();
     }
+
+    @GetMapping("/count-by-capital")
+    public Map<String, Long> countCountriesByCapital() {
+        return countries.values().stream()
+                .collect(Collectors.groupingBy(
+                        Country::getCapital,
+                        Collectors.counting()
+                ));
+    }
 }

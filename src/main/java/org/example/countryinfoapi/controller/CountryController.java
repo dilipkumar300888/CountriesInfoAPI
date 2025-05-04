@@ -2,7 +2,11 @@ package org.example.countryinfoapi.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.countryinfoapi.model.Country;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +16,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/countries")
 public class CountryController {
+    private final View error;
     private Map<String, Country> countries = new HashMap<>();
+
+    public CountryController(View error) {
+        this.error = error;
+    }
 
     @GetMapping
     public Collection<Country> getCountries() {
@@ -188,4 +197,19 @@ public class CountryController {
                         Collectors.counting()
                 ));
     }
+
+    @PostMapping
+    public ResponseEntity<?> createCountry(@Valid @RequestParam Country country, BindingResult result) {
+        if(result.hasErrors()) {
+            List<String> errors = result.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .toList();
+            return ResponseEntity.badRequest().body(errors);
+        }
+        String code = country.getCode() != null ? country.getCode() : UUID.randomUUID().toString().substring(0,2).toUpperCase();
+        country.setCode(code);
+        countries.put(code.hashCode(), country);
+        return ResponseEntity.status(HttpStatus.CREATED).body(country);
+    }
+
 }
